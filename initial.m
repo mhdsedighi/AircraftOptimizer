@@ -136,7 +136,8 @@ state.Q=       0;         %pitchrate, rad/s
 state.R=       0;         %yawrate, rad/s
 state.adot=    0;         %Alpha time derivative rad/s
 state.bdot=    0;         %Betha time derivative rad/s
-state.ALT= 60000*0.3048;         %Altitude, m
+% state.ALT= 60000*0.3048;         %Altitude, m
+state.ALT= 30000*0.3048;         %Altitude, m
 state.pgcorr=       1;          %Apply prandtl glauert compressibility
 state.phi=0;
 state.theta=0;
@@ -260,7 +261,7 @@ act_num=1;
 CD0_blunt=zldpblunt(state,body,ref);
 %%% Summing up viscous drag
 % CD0=sum(sum(CD0_wing))+sum(CD0_blunt);
-CD0=sum(sum(CD0_wing))+sum(CD0_blunt);
+CD0=sum(sum(CD0_wing))+CD0_blunt;
 results.CD0=CD0;
 results.CD_body=CD0_blunt;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -358,5 +359,5 @@ if doplot
 %     plot_plane(body,geo,struc)
 end
 
-plot_inertia_model(struc)
-
+% plot_inertia_model(struc)
+% results.D

@@ -1,4 +1,4 @@
-function [R,lattice,perf,trim_cost,act,state,geo,struc,engine,ref] = compute_aircraft2(design_code,trim_code,state,geo,struc,body,act,engine,ref)
+function [results,lattice,perf,trim_cost,act,state,geo,struc,engine,ref] = compute_aircraft2(design_code,trim_code,state,geo,struc,body,act,engine,ref)
 
 
 lattictype=1;
@@ -82,13 +82,13 @@ hinge_pos=squeeze(lattice.XYZ(1,1,:))';
 
 [results]=solver9(results,state,geo,lattice,ref);
 [results]=coeff_create3(results,lattice,state,ref,geo);
-perf=performance_calc(R,state,struc,engine,ref);
+perf=performance_calc(results,state,struc,engine,ref);
 
 
 %%%trim
 % weight_unitvector=[cos(state.phi)*sin(state.theta) sin(state.phi)*cos(state.alpha) -cos(state.phi)*cos(state.theta)];
-weight_unitvector=[-sin(state.theta) 0 cos(state.theta)];
-weight_moment=cross((struc.cg_all'-geo.ref_point),struc.mass_all*state.g*weight_unitvector);
+% weight_unitvector=[-sin(state.theta) 0 cos(state.theta)];
+% weight_moment=cross((struc.cg_all'-geo.ref_point),struc.mass_all*state.g*weight_unitvector);
 
 
 [rho,a,~,~]=ISAtmosphere(state.ALT);     %Calling International Standard atmosphere.
@@ -103,17 +103,26 @@ state.q=0.5*(state.rho)*(state.AS)^2;
 % results.Cm*state.q*ref.S_ref*ref.C_mac
 % weight_moment(2)
 
-Thrust_vec_b=[-engine.Thrust;0;0];
 
+B2WTransform=[cos(state.betha)*cos(state.alpha),        -sin(state.betha),          cos(state.betha)*sin(state.alpha) ;...
+              cos(state.alpha)*sin(state.betha),         cos(state.betha),          sin(state.betha)*sin(state.alpha) ;...
+                              -sin(state.alpha),                        0,                           cos(state.alpha)];
 
-delta1=-(results.CD)*state.q*ref.S_ref+engine.Thrust;
-delta2=results.CZ*state.q*ref.S_ref-struc.mass_all*state.g;
-% % delta3=results.Cm*state.q*ref.S_ref*ref.C_mac-engine.Thrust*(engine.pos(3)+geo.ref_point(3))+weight_moment(2);
+Thrust_vec_b=engine.Thrust*[1;0;0];
+Thrust_vec_w=B2WTransform*Thrust_vec_b;
+weight_vec_w=struc.mass_all*state.g*[0;0;-1];
+weight_vec_b=B2WTransform'*weight_vec_w;
+
+weight_moment=cross((struc.cg_all'-geo.ref_point),weight_vec_b);
+
+delta1=-(results.CD)*state.q*ref.S_ref+Thrust_vec_w(1)+weight_vec_w(1);
+delta2=results.CL*state.q*ref.S_ref+Thrust_vec_w(3)+weight_vec_w(3);
 delta3=results.Cm*state.q*ref.S_ref*ref.C_mac+weight_moment(2);
 
 trim_cost=abs(delta1)+abs(delta2)+abs(delta3);
 
 
+% trim_cost=abs(delta2);
 
 % results.a1=-(results.CD)*state.q*ref.S_ref;
 % results.a2=engine.Thrust;

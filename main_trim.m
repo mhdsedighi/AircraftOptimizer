@@ -1,5 +1,5 @@
 
-finilize=0;
+finilize=1;
 N_condition=1;
 
 struc.m_fuel=0.9*W_f;
@@ -31,9 +31,9 @@ i_twist_angle=[-10 10]*pi/180;
 % i_Raxle_local=[0 0 0;1 1 1];
 
 i_alpha=[0 10]*pi/180;
-i_elevator_angle=[-10 10]*pi/180;
+i_elevator_angle=[-20 20]*pi/180;
 i_throttle=[0 1];
-i_AS=[0.5 0.6]*357*0.44704;
+i_AS=[0.3 1.1]*357*0.44704;
 
 % i_actmass=[0 0;100 100];
 % i_actmass=[0 100]';

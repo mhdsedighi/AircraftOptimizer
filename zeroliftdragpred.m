@@ -1,4 +1,4 @@
-function[CD0 Re Swet Vol]=zeroliftdragpred(Mach,Alt,geo,ref)
+function [CD0 Re Swet Vol]=zeroliftdragpred(Mach,Alt,geo,ref)
 %zeroliftdragpred, Zero Lift Drag Prediction.
 %This function predicts the zero lift drag of an airplane configuration
 %

@@ -116,7 +116,8 @@ results.CX=CX(:,1);
 results.CY=CY(:,1);
 results.CZ=CZ(:,1);
 results.CL=CL(:,1);
-results.CD=CD(:,1);
+%%% changed by mehdi
+results.CD=CD(:,1)+results.CD0;
 results.CC=CC(:,1);
 results.Cl=Cl(:,1);
 results.Cm=Cm(:,1);

@@ -1,4 +1,4 @@
-function perf=performance_calc(R,state,struc,engine,ref)
+function perf=performance_calc(results,state,struc,engine,ref)
 
 U0=state.AS;
 % theta0=0;
