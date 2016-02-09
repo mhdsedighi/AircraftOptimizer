@@ -159,3 +159,21 @@ cost=cost_func2(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_st
 
 
 na=ans_state(1).q*ans_aero(1).CL_a/(struc.mass_all/ref.S_ref);
+
+
+ca=cos(ans_state.alpha);
+sa=sin(ans_state.alpha);
+B2WTransform=[ca,0,sa ;0,1,0 ;-sa,0,ca];
+
+Thrust_vec_b=ans_engine.Thrust*[1;0;0];
+Thrust_vec_w=B2WTransform*Thrust_vec_b;
+weight_vec_w=ans_struc.mass_all*state.g*[0;0;-1];
+weight_vec_b=B2WTransform'*weight_vec_w;
+
+weight_moment=cross((ans_struc.cg_all'-ans_geo.ref_point),weight_vec_b);
+
+delta1=-(ans_aero.CD)*ans_state.q*ans_ref.S_ref+Thrust_vec_w(1)+weight_vec_w(1);
+delta2=ans_aero.CL*ans_state.q*ans_ref.S_ref+Thrust_vec_w(3)+weight_vec_w(3);
+delta3=ans_aero.Cm*ans_state.q*ans_ref.S_ref*ans_ref.C_mac+weight_moment(2);
+
+trim_cost=abs(delta1)+abs(delta2)+abs(delta3);

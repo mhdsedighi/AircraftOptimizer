@@ -104,9 +104,13 @@ state.q=0.5*(state.rho)*(state.AS)^2;
 % weight_moment(2)
 
 
-B2WTransform=[cos(state.betha)*cos(state.alpha),        -sin(state.betha),          cos(state.betha)*sin(state.alpha) ;...
-              cos(state.alpha)*sin(state.betha),         cos(state.betha),          sin(state.betha)*sin(state.alpha) ;...
-                              -sin(state.alpha),                        0,                           cos(state.alpha)];
+% B2WTransform=[cos(state.betha)*cos(state.alpha),        -sin(state.betha),          cos(state.betha)*sin(state.alpha) ;...
+%               cos(state.alpha)*sin(state.betha),         cos(state.betha),          sin(state.betha)*sin(state.alpha) ;...
+%                               -sin(state.alpha),                        0,                           cos(state.alpha)];
+
+ca=cos(state.alpha);
+sa=sin(state.alpha);
+B2WTransform=[ca,0,sa ;0,1,0 ;-sa,0,ca];
 
 Thrust_vec_b=engine.Thrust*[1;0;0];
 Thrust_vec_w=B2WTransform*Thrust_vec_b;
