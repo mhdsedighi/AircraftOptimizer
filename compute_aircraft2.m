@@ -96,13 +96,6 @@ state.rho=rho;
 state.Mach=state.AS/a;
 state.q=0.5*(state.rho)*(state.AS)^2;
 
-% engine.Thrust
-% (results.CD)*state.q*ref.S_ref
-% struc.mass_all*state.g
-% results.CZ*state.q*ref.S_ref
-% results.Cm*state.q*ref.S_ref*ref.C_mac
-% weight_moment(2)
-
 
 % B2WTransform=[cos(state.betha)*cos(state.alpha),        -sin(state.betha),          cos(state.betha)*sin(state.alpha) ;...
 %               cos(state.alpha)*sin(state.betha),         cos(state.betha),          sin(state.betha)*sin(state.alpha) ;...
@@ -125,15 +118,6 @@ delta3=results.Cm*state.q*ref.S_ref*ref.C_mac+weight_moment(2);
 
 trim_cost=abs(delta1)+abs(delta2)+abs(delta3);
 
-
-% trim_cost=abs(delta2);
-
-% results.a1=-(results.CD)*state.q*ref.S_ref;
-% results.a2=engine.Thrust;
-% results.a3=results.CZ*state.q*ref.S_ref;
-% results.a4=-struc.mass_all*state.g;
-% results.a5=results.Cm*state.q*ref.S_ref*ref.C_mac;
-% results.a6=weight_moment(2);
 
 
 end

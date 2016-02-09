@@ -1,4 +1,4 @@
-function [R,lattice,perf,trim_cost,act,state,geo,struc,engine,ref] = compute_aircraft3(design_code,morph_code,trim_code,actmass_code,state,geo,struc,body,act,engine,ref)
+function [results,lattice,perf,trim_cost,act,state,geo,struc,engine,ref] = compute_aircraft3(design_code,morph_code,trim_code,actmass_code,state,geo,struc,body,act,engine,ref)
 
 
 lattictype=1;

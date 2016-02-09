@@ -29,8 +29,8 @@ N_t=N_design+N_morph+N_trim+N_act;
 i_Xwing=[-0.5 0.5];
 i_Zwing=[-0.2 0.2];
 i_bfrac1=[0.01 0.5];
-i_sweep_angle=[-15 15]*pi/180;
-i_twist_angle=[-15 15]*pi/180;
+i_sweep_angle=[0 10]*pi/180;
+i_twist_angle=[0 10]*pi/180;
 % i_taper=[0.1 1]*pi/180;
 
 
@@ -40,7 +40,7 @@ i_Raxle_local=[0 0 0;1 1 1];
 
 i_alpha=[0 10]*pi/180;
 i_elevator_angle=[-20 20]*pi/180;
-i_throttle=[0 1];
+i_throttle=[0 1.5];
 V_service=357*0.44704;
 i_AS=[0.6 1.2]*V_service;
 
@@ -68,6 +68,25 @@ ub2_prime=bound2_prime(2,:);
 input1=(lb1+ub1)/2;
 input2=(lb2+ub2)/2;
 input2_prime=(lb2_prime+ub2_prime)/2;
+
+b1=[i_Xwing' i_Zwing' i_sweep_angle' i_twist_angle'];
+b4=[i_alpha' i_elevator_angle' i_throttle' i_AS'];
+
+
+%%%% for better guess
+input1(1)=guess_design_code(1);
+input1(2)=guess_design_code(2);
+input1(4)=guess_design_code(3);
+input1(5)=guess_design_code(4);
+input2(N_morph+1)=guess_trim_code(1);
+input2(N_morph+2)=guess_trim_code(2);
+input2(N_morph+3)=guess_trim_code(3);
+input2(N_morph+4)=guess_trim_code(4);
+input2_prime(N_morph+1)=guess_trim_code(1);
+input2_prime(N_morph+2)=guess_trim_code(2);
+input2_prime(N_morph+3)=guess_trim_code(3);
+input2_prime(N_morph+4)=guess_trim_code(4);
+%%%% for better guess
 
 input=input1;
 LB=lb1;
@@ -111,28 +130,28 @@ options = saoptimset(options,'DisplayInterval',1);
 
 
 
-% % %%% Starting with the default options
-% % options = gaoptimset;
-% % %%% Modifying options setting
-% % options = gaoptimset(options,'InitialPopulation', input);
-% % % options = gaoptimset(options,'StallGenLimit', Stall_Limit);
-% % % options = gaoptimset(options,'TolFun', Optimization_Tolerance);
-% % % options = gaoptimset(options,'TolCon',Costraint_Tolerance);
-% % options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
-% % options = saoptimset(options,'PlotInterval',3);
-% % options = gaoptimset(options,'Display', 'iter');
-% % options = gaoptimset(options,'UseParallel', 'always');
-% % 
-% % options = gaoptimset(options,'PopulationSize', 10);
-% % % options = gaoptimset(options,'EliteCount', EliteCount);
-% % % options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
-% % % options = gaoptimset(options,'MigrationInterval', MigrationInterval);
-% % % options = gaoptimset(options,'MigrationFraction', MigrationFraction);
-% % options = gaoptimset(options,'Generations', 1000);
-% % % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
-% % % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
-% % 
-% % [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+%%% Starting with the default options
+options = gaoptimset;
+%%% Modifying options setting
+options = gaoptimset(options,'InitialPopulation', input);
+% options = gaoptimset(options,'StallGenLimit', Stall_Limit);
+% options = gaoptimset(options,'TolFun', Optimization_Tolerance);
+% options = gaoptimset(options,'TolCon',Costraint_Tolerance);
+options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
+options = saoptimset(options,'PlotInterval',3);
+options = gaoptimset(options,'Display', 'iter');
+options = gaoptimset(options,'UseParallel', 'always');
+
+options = gaoptimset(options,'PopulationSize', 10);
+% options = gaoptimset(options,'EliteCount', EliteCount);
+% options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
+% options = gaoptimset(options,'MigrationInterval', MigrationInterval);
+% options = gaoptimset(options,'MigrationFraction', MigrationFraction);
+options = gaoptimset(options,'Generations', 1000);
+% options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
+% options = gaoptimset(options,'InitialPenalty', InitialPenalty);
+
+[x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
 
 
 
@@ -141,7 +160,7 @@ options = saoptimset(options,'DisplayInterval',1);
 
 
 
-% x=input;
+x=input;
 finilize=1;
 cost=cost_func(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
 

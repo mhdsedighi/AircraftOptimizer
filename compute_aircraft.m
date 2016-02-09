@@ -1,4 +1,4 @@
-function [R,perf,trim_cost,act,state,geo,struc,engine,ref] = compute_aircraft(design_code,morph_code,trim_code,actmass_code,state,geo,struc,body,act,engine,ref)
+function [results,perf,trim_cost,act,state,geo,struc,engine,ref] = compute_aircraft(design_code,morph_code,trim_code,actmass_code,state,geo,struc,body,act,engine,ref)
 
 
 lattictype=1;
@@ -84,7 +84,7 @@ hinge_portion=0.5;
 
 [results]=solver9(results,state,geo,lattice,ref);
 [results]=coeff_create3(results,lattice,state,ref,geo);
-perf=performance_calc(R,state,struc,engine,ref);
+perf=performance_calc(results,state,struc,engine,ref);
 
 %%%trim
 weight_unitvector=[cos(state.phi)*sin(state.theta) sin(state.phi)*cos(state.alpha) -cos(state.phi)*cos(state.theta)];

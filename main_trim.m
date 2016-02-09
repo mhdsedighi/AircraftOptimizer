@@ -22,8 +22,8 @@ N_t=N_design+N_morph+N_trim+N_act;
 
 i_Xwing=[-0.5 0.5];
 i_Zwing=[-0.2 0.2];
-i_sweep_angle=[-10 10]*pi/180;
-i_twist_angle=[-10 10]*pi/180;
+i_sweep_angle=[0 0]*pi/180;
+i_twist_angle=[0 10]*pi/180;
 
 
 % i_course_portion=[0 0.5];
@@ -32,8 +32,8 @@ i_twist_angle=[-10 10]*pi/180;
 
 i_alpha=[0 10]*pi/180;
 i_elevator_angle=[-20 20]*pi/180;
-i_throttle=[0 1];
-i_AS=[0.3 1.1]*357*0.44704;
+i_throttle=[0 1.5];
+i_AS=[1 1]*357*0.44704;
 
 % i_actmass=[0 0;100 100];
 % i_actmass=[0 100]';
@@ -70,55 +70,55 @@ end
 
 fun=@(input)cost_func2(input,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
 
-%%% Starting with the default options for Simulated Annealing
-options = saoptimset;
-%%% Modifying options setting for Simulated Annealing
-% options = saoptimset(options,'TolFun', Optimization_Tolerance);
-% options = saoptimset(options,'MaxFunEvals', MaxFunctionEvaluation);
-% options = saoptimset(options,'MaxIter', MaxIteration);
-% options = saoptimset(options,'StallIterLimit', StallIterLimit_Data);
-% options = saoptimset(options,'InitialTemperature', InitialTemperature);
-% options = saoptimset(options,'ReannealInterval', ReannealInterval);
-% options = saoptimset(options,'HybridInterval', 'end');
-options = saoptimset(options,'Display', 'iter');
-options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
-% % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
-% options = saoptimset(options,'PlotInterval',100);
-% options = saoptimset(options,'DisplayInterval',100);
+
+% % % %%% Starting with the default options for Simulated Annealing
+% % % options = saoptimset;
+% % % %%% Modifying options setting for Simulated Annealing
+% % % % options = saoptimset(options,'TolFun', Optimization_Tolerance);
+% % % % options = saoptimset(options,'MaxFunEvals', MaxFunctionEvaluation);
+% % % % options = saoptimset(options,'MaxIter', MaxIteration);
+% % % % options = saoptimset(options,'StallIterLimit', StallIterLimit_Data);
+% % % % options = saoptimset(options,'InitialTemperature', InitialTemperature);
+% % % % options = saoptimset(options,'ReannealInterval', ReannealInterval);
+% % % % options = saoptimset(options,'HybridInterval', 'end');
+% % % options = saoptimset(options,'Display', 'iter');
+% % % options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
+% % % % % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
+% % % % options = saoptimset(options,'PlotInterval',100);
+% % % % options = saoptimset(options,'DisplayInterval',100);
+% % % 
+% % % 
+% % % %%% Running Simulated Annealing for finding minimum of Electricity Cost
+% % % [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
+% % % 
+% % % 
+% % % % options = psoptimset;
+% % % % options.Display='Iter';
+% % % % x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
 
 
-%%% Running Simulated Annealing for finding minimum of Electricity Cost
-[x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
 
+% %% Starting with the default options
+options = gaoptimset;
+% %% Modifying options setting
+options = gaoptimset(options,'InitialPopulation', input);
+% options = gaoptimset(options,'StallGenLimit', Stall_Limit);
+% options = gaoptimset(options,'TolFun', Optimization_Tolerance);
+% options = gaoptimset(options,'TolCon',Costraint_Tolerance);
+options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
+options = saoptimset(options,'PlotInterval',3);
+options = gaoptimset(options,'Display', 'iter');
+options = gaoptimset(options,'UseParallel', 'always');
+options = gaoptimset(options,'PopulationSize', 100);
+% options = gaoptimset(options,'EliteCount', EliteCount);
+% options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
+% options = gaoptimset(options,'MigrationInterval', MigrationInterval);
+% options = gaoptimset(options,'MigrationFraction', MigrationFraction);
+% options = gaoptimset(options,'Generations', Max_Generations);
+% options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
+% options = gaoptimset(options,'InitialPenalty', InitialPenalty);
 
-% options = psoptimset;
-% options.Display='Iter';
-% x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
-
-
-
-% %%% Starting with the default options
-% options = gaoptimset;
-% %%% Modifying options setting
-% options = gaoptimset(options,'InitialPopulation', input);
-% % options = gaoptimset(options,'StallGenLimit', Stall_Limit);
-% % options = gaoptimset(options,'TolFun', Optimization_Tolerance);
-% % options = gaoptimset(options,'TolCon',Costraint_Tolerance);
-% options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
-% options = saoptimset(options,'PlotInterval',3);
-% options = gaoptimset(options,'Display', 'iter');
-% options = gaoptimset(options,'UseParallel', 'always');
-% 
-% options = gaoptimset(options,'PopulationSize', 40);
-% % options = gaoptimset(options,'EliteCount', EliteCount);
-% % options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
-% % options = gaoptimset(options,'MigrationInterval', MigrationInterval);
-% % options = gaoptimset(options,'MigrationFraction', MigrationFraction);
-% % options = gaoptimset(options,'Generations', Max_Generations);
-% % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
-% % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
-
-% [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+[x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
 
 % % x=input;
 finilize=1;
@@ -172,8 +172,17 @@ weight_vec_b=B2WTransform'*weight_vec_w;
 
 weight_moment=cross((ans_struc.cg_all'-ans_geo.ref_point),weight_vec_b);
 
-delta1=-(ans_aero.CD)*ans_state.q*ans_ref.S_ref+Thrust_vec_w(1)+weight_vec_w(1);
-delta2=ans_aero.CL*ans_state.q*ans_ref.S_ref+Thrust_vec_w(3)+weight_vec_w(3);
-delta3=ans_aero.Cm*ans_state.q*ans_ref.S_ref*ans_ref.C_mac+weight_moment(2);
+delta1=-(ans_aero.CD)*ans_state.q*ans_ref.S_ref+Thrust_vec_w(1)+weight_vec_w(1)
+delta2=ans_aero.CL*ans_state.q*ans_ref.S_ref+Thrust_vec_w(3)+weight_vec_w(3)
+delta3=ans_aero.Cm*ans_state.q*ans_ref.S_ref*ans_ref.C_mac+weight_moment(2)
+
+ans_trim_code(1)*180/pi
+ans_trim_code(2)*180/pi
 
 trim_cost=abs(delta1)+abs(delta2)+abs(delta3);
+
+guess_design_code(1:N_design)=x(1:N_design);
+inputmat=vector2matrix(x(N_design+N_act+1:end),N_condition,N_trim+N_morph);
+guess_trim_code(1,1:N_trim)=inputmat(1,N_morph+1:N_morph+N_trim);
+
+save('trim_results')
