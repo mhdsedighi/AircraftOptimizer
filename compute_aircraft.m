@@ -96,9 +96,19 @@ state.Mach=state.AS/a;
 state.q=0.5*(state.rho)*(state.AS)^2;
 
 
-delta1=-(results.CD)*state.q*ref.S_ref+engine.Thrust;
-delta2=results.CZ*state.q*ref.S_ref-struc.mass_all*state.g;
-% % delta3=results.Cm*state.q*ref.S_ref*ref.C_mac-engine.Thrust*(engine.pos(3)+geo.ref_point(3))+weight_moment(2);
+ca=cos(state.alpha);
+sa=sin(state.alpha);
+B2WTransform=[ca,0,sa ;0,1,0 ;-sa,0,ca];
+
+Thrust_vec_b=engine.Thrust*[1;0;0];
+Thrust_vec_w=B2WTransform*Thrust_vec_b;
+weight_vec_w=struc.mass_all*state.g*[0;0;-1];
+weight_vec_b=B2WTransform'*weight_vec_w;
+
+weight_moment=cross((struc.cg_all'-geo.ref_point),weight_vec_b);
+
+delta1=-(results.CD)*state.q*ref.S_ref+Thrust_vec_w(1)+weight_vec_w(1);
+delta2=results.CL*state.q*ref.S_ref+Thrust_vec_w(3)+weight_vec_w(3);
 delta3=results.Cm*state.q*ref.S_ref*ref.C_mac+weight_moment(2);
 
 trim_cost=abs(delta1)+abs(delta2)+abs(delta3);

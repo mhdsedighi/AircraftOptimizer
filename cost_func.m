@@ -65,7 +65,7 @@ mass_error=max(mass_error_mat(1,:));
 % 
 % cost=-s1-s2-s3+s4;
 
-cost_trim=sum(all_trim_cost.^2);
+cost_trim=sum(all_trim_cost);
 % cost=sum(all_trim_cost);
 
 % perf_cost1=abs(all_state(1).AS/all_engine(1).fuelFlow)+abs(all_state(2).AS/all_engine(2).fuelFlow)+abs(all_state(3).AS/all_engine(3).fuelFlow);

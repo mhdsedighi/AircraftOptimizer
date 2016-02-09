@@ -74,6 +74,7 @@ b4=[i_alpha' i_elevator_angle' i_throttle' i_AS'];
 
 
 %%%% for better guess
+load('trim_results')
 input1(1)=guess_design_code(1);
 input1(2)=guess_design_code(2);
 input1(4)=guess_design_code(3);
@@ -160,7 +161,7 @@ options = gaoptimset(options,'Generations', 1000);
 
 
 
-x=input;
+% x=input;
 finilize=1;
 cost=cost_func(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
 

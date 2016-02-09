@@ -185,4 +185,4 @@ guess_design_code(1:N_design)=x(1:N_design);
 inputmat=vector2matrix(x(N_design+N_act+1:end),N_condition,N_trim+N_morph);
 guess_trim_code(1,1:N_trim)=inputmat(1,N_morph+1:N_morph+N_trim);
 
-save('trim_results')
+save('trim_results','guess_design_code','guess_trim_code')
