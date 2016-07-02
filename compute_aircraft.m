@@ -87,8 +87,8 @@ hinge_portion=0.5;
 perf=performance_calc(results,state,struc,engine,ref);
 
 %%%trim
-weight_unitvector=[cos(state.phi)*sin(state.theta) sin(state.phi)*cos(state.alpha) -cos(state.phi)*cos(state.theta)];
-weight_moment=cross((struc.cg_all'-geo.ref_point),struc.mass_all*state.g*weight_unitvector);
+% weight_unitvector=[cos(state.phi)*sin(state.theta) sin(state.phi)*cos(state.alpha) -cos(state.phi)*cos(state.theta)];
+% weight_moment=cross((struc.cg_all'-geo.ref_point),struc.mass_all*state.g*weight_unitvector);
 
 [rho,a,~,~]=ISAtmosphere(state.ALT);     %Calling International Standard atmosphere.
 state.rho=rho;

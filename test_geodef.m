@@ -240,7 +240,7 @@ derivatives
 stability
 
 
-% plot_inertia_model(geo,lattice)
+plot_inertia_model(geo,lattice)
 % showroom
 % % 
 % % DP=[-70 0 70 140

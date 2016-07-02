@@ -35,8 +35,8 @@ i_twist_angle=[0 10]*pi/180;
 
 
 % i_course_portion=[0 0.5];
-i_rot_angle=[-40 40]*pi/180;
-i_Raxle_local=[0 0 0;1 1 1];
+i_rot_angle=[0 0]*pi/180;
+i_Raxle_local=[1 0 0;1 0 0];
 
 i_alpha=[0 10]*pi/180;
 i_elevator_angle=[-20 20]*pi/180;
@@ -69,8 +69,8 @@ input1=(lb1+ub1)/2;
 input2=(lb2+ub2)/2;
 input2_prime=(lb2_prime+ub2_prime)/2;
 
-b1=[i_Xwing' i_Zwing' i_sweep_angle' i_twist_angle'];
-b4=[i_alpha' i_elevator_angle' i_throttle' i_AS'];
+% b1=[i_Xwing' i_Zwing' i_sweep_angle' i_twist_angle'];
+% b4=[i_alpha' i_elevator_angle' i_throttle' i_AS'];
 
 
 %%%% for better guess
@@ -141,9 +141,9 @@ options = gaoptimset(options,'InitialPopulation', input);
 options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
 options = saoptimset(options,'PlotInterval',3);
 options = gaoptimset(options,'Display', 'iter');
-options = gaoptimset(options,'UseParallel', 'always');
+% options = gaoptimset(options,'UseParallel', 'always');
 
-options = gaoptimset(options,'PopulationSize', 10);
+options = gaoptimset(options,'PopulationSize', 30);
 % options = gaoptimset(options,'EliteCount', EliteCount);
 % options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
 % options = gaoptimset(options,'MigrationInterval', MigrationInterval);
@@ -154,8 +154,13 @@ options = gaoptimset(options,'Generations', 1000);
 
 [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
 
-
-
+% options = psoptimset;
+% options.Display='Iter';
+% options.PlotFcns={@psplotbestf @psplotbestx};
+% x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
+% 
+% 
+% 
 
 
 

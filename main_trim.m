@@ -92,9 +92,10 @@ fun=@(input)cost_func2(input,N_condition,N_design,N_morph,N_trim,N_act,all_state
 % % % [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
 % % % 
 % % % 
-% % % % options = psoptimset;
-% % % % options.Display='Iter';
-% % % % x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
+options = psoptimset;
+options.Display='Iter';
+options.PlotFcns={@psplotbestf};
+x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
 
 
 
@@ -118,7 +119,7 @@ options = gaoptimset(options,'PopulationSize', 100);
 % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
 % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
 
-[x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+% [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
 
 % % x=input;
 finilize=1;
