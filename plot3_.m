@@ -101,7 +101,7 @@ geo.fc=         [0.1 0.1 0.1          %Part of chord that is flapped of
 
 geo.flap_vector= [0 0 0         %Flap deflection, [rad]
     -5 0 0         %right hand positive outboard
-    0 0 0]*pi/180;
+    30 0 0]*pi/180;
 
 
 geo.airfoil=[{'0012'} {'0012'} {'0012'} {'0012'}     %Airfoil of section borders
@@ -187,8 +187,7 @@ end
 
 engine.number       =1;
 engine.unitvector   =[-1 0 0];
-% engine.pos         =[31  0  2.5]*0.3048;
-engine.pos         =[31  0  0]*0.3048;
+engine.pos         =[31  0  2.5]*0.3048;
 engine.throttle=0.3;
 engine=engine_calc(engine,state);
 
@@ -223,7 +222,7 @@ partno=3;
 Raxle_local=[0 0 1];
 Raxle_local=Raxle_local/norm(Raxle_local);
 hinge_pos=[0 0 0];
-alpha=deg2rad(45);
+alpha=deg2rad(-20);
 % isattached=1;
 hinge_portion=0.5;
 pivot_portion=0.5;

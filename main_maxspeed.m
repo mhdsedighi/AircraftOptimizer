@@ -86,21 +86,21 @@ options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
 
 
 %%% Running Simulated Annealing for finding minimum of Electricity Cost
-[x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
+% [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
 
 
 
-% %%% Starting with the default options
-% options = gaoptimset;
-% %%% Modifying options setting
-% options = gaoptimset(options,'InitialPopulation', input);
-% % options = gaoptimset(options,'StallGenLimit', Stall_Limit);
-% % options = gaoptimset(options,'TolFun', Optimization_Tolerance);
-% % options = gaoptimset(options,'TolCon',Costraint_Tolerance);
-% options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
-% options = saoptimset(options,'PlotInterval',3);
-% options = gaoptimset(options,'Display', 'iter');
-% options = gaoptimset(options,'UseParallel', 'always');
+%%% Starting with the default options
+options = gaoptimset;
+%%% Modifying options setting
+options = gaoptimset(options,'InitialPopulation', input);
+% options = gaoptimset(options,'StallGenLimit', Stall_Limit);
+% options = gaoptimset(options,'TolFun', Optimization_Tolerance);
+% options = gaoptimset(options,'TolCon',Costraint_Tolerance);
+options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
+options = saoptimset(options,'PlotInterval',3);
+options = gaoptimset(options,'Display', 'iter');
+options = gaoptimset(options,'UseParallel', 'always');
 % 
 % options = gaoptimset(options,'PopulationSize', 40);
 % % options = gaoptimset(options,'EliteCount', EliteCount);
@@ -111,11 +111,11 @@ options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
 % % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
 % % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
 
-% [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+[x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
 
 % % x=input;
-finilize=1;
-cost=cost_func7(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
+% finilize=1;
+% cost=cost_func7(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
 
 
 %%%%test

@@ -127,37 +127,37 @@ options = saoptimset(options,'DisplayInterval',1);
 
 
 % %% Running Simulated Annealing for finding minimum of Electricity Cost
-% [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
+[x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
 
 
-
-%%% Starting with the default options
-options = gaoptimset;
-%%% Modifying options setting
-options = gaoptimset(options,'InitialPopulation', input);
-% options = gaoptimset(options,'StallGenLimit', Stall_Limit);
-% options = gaoptimset(options,'TolFun', Optimization_Tolerance);
-% options = gaoptimset(options,'TolCon',Costraint_Tolerance);
-options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
-options = saoptimset(options,'PlotInterval',3);
-options = gaoptimset(options,'Display', 'iter');
-% options = gaoptimset(options,'UseParallel', 'always');
-
-options = gaoptimset(options,'PopulationSize', 30);
-% options = gaoptimset(options,'EliteCount', EliteCount);
-% options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
-% options = gaoptimset(options,'MigrationInterval', MigrationInterval);
-% options = gaoptimset(options,'MigrationFraction', MigrationFraction);
-options = gaoptimset(options,'Generations', 1000);
-% options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
-% options = gaoptimset(options,'InitialPenalty', InitialPenalty);
-
-[x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
-
-% options = psoptimset;
-% options.Display='Iter';
-% options.PlotFcns={@psplotbestf @psplotbestx};
-% x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
+% 
+% %%% Starting with the default options
+% options = gaoptimset;
+% %%% Modifying options setting
+% options = gaoptimset(options,'InitialPopulation', input);
+% % options = gaoptimset(options,'StallGenLimit', Stall_Limit);
+% % options = gaoptimset(options,'TolFun', Optimization_Tolerance);
+% % options = gaoptimset(options,'TolCon',Costraint_Tolerance);
+% options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
+% options = saoptimset(options,'PlotInterval',3);
+% options = gaoptimset(options,'Display', 'iter');
+% % options = gaoptimset(options,'UseParallel', 'always');
+% 
+% options = gaoptimset(options,'PopulationSize', 30);
+% % options = gaoptimset(options,'EliteCount', EliteCount);
+% % options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
+% % options = gaoptimset(options,'MigrationInterval', MigrationInterval);
+% % options = gaoptimset(options,'MigrationFraction', MigrationFraction);
+% options = gaoptimset(options,'Generations', 1000);
+% % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
+% % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
+% 
+% [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+% 
+% % options = psoptimset;
+% % options.Display='Iter';
+% % options.PlotFcns={@psplotbestf @psplotbestx};
+% % x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
 % 
 % 
 % 

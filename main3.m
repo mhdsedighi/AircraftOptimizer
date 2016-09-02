@@ -113,34 +113,34 @@ Cost_Dual=@(input)cost_func4(input,N_condition,N_design,N_morph,N_trim,N_act,all
 
 
 %%% Starting with the default options
-% % options = gaoptimset;
-% %%% Modifying options setting
-% options = gaoptimset(options,'InitialPopulation', InitialPopulation);
-% options = gaoptimset(options,'PopulationSize', PopulationSize);
-% % options = gaoptimset(options,'EliteCount', EliteCount);
-% options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
-% options = gaoptimset(options,'MigrationInterval', MigrationInterval);
-% options = gaoptimset(options,'MigrationFraction', MigrationFraction);
-% options = gaoptimset(options,'Generations', Max_Generations);
-% options = gaoptimset(options,'StallGenLimit', StallGenLimit);
-% options = gaoptimset(options,'TolFun', Optimization_Tolerance);
-% options = gaoptimset(options,'InitialPopulation', InitialPopulation);
-% options = gaoptimset(options,'InitialPenalty', InitialPenalty);
-% options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
-% options = gaoptimset(options,'Display', 'iter');
-% options = gaoptimset(options,'CrossoverFcn', {  @crossoverintermediate [] });
-% options = gaoptimset(options,'Display', 'iter');
-% % options = gaoptimset(options,'PlotFcns', {@gaplotpareto});
-% options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
-% options = gaoptimset(options,'PlotInterval', 3);
-% options = gaoptimset(options,'UseParallel', 'always');
-% Nvars=length(input);
+options = gaoptimset;
+%%% Modifying options setting
+options = gaoptimset(options,'InitialPopulation', InitialPopulation);
+options = gaoptimset(options,'PopulationSize', PopulationSize);
+% options = gaoptimset(options,'EliteCount', EliteCount);
+options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
+options = gaoptimset(options,'MigrationInterval', MigrationInterval);
+options = gaoptimset(options,'MigrationFraction', MigrationFraction);
+options = gaoptimset(options,'Generations', Max_Generations);
+options = gaoptimset(options,'StallGenLimit', StallGenLimit);
+options = gaoptimset(options,'TolFun', Optimization_Tolerance);
+options = gaoptimset(options,'InitialPopulation', InitialPopulation);
+options = gaoptimset(options,'InitialPenalty', InitialPenalty);
+options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
+options = gaoptimset(options,'Display', 'iter');
+options = gaoptimset(options,'CrossoverFcn', {  @crossoverintermediate [] });
+options = gaoptimset(options,'Display', 'iter');
+% options = gaoptimset(options,'PlotFcns', {@gaplotpareto});
+options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
+options = gaoptimset(options,'PlotInterval', 3);
+options = gaoptimset(options,'UseParallel', 'always');
+Nvars=length(input);
 
-% [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+[x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
 
 % [x,fval,exitflag,output,population,score] = gamultiobj(Cost_Dual,Nvars,[],[],[],[],LB,UB,[],options);
 
-%%%%%% Starting with the default options for Simulated Annealing
+% %%%%%% Starting with the default options for Simulated Annealing
 % options = saoptimset;
 % % %% Modifying options setting for Simulated Annealing
 % % options = saoptimset(options,'TolFun', Optimization_Tolerance);
@@ -155,10 +155,10 @@ Cost_Dual=@(input)cost_func4(input,N_condition,N_design,N_morph,N_trim,N_act,all
 % % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
 % options = saoptimset(options,'PlotInterval',3);
 % options = saoptimset(options,'DisplayInterval',1);
-% 
-% 
-% % %% Running Simulated Annealing for finding minimum of Electricity Cost
-% [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
+
+
+% %% Running Simulated Annealing for finding minimum of Electricity Cost
+[x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
 
 
 
