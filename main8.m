@@ -1,6 +1,10 @@
 
 finilize=0;
-N_condition=2;
+N_condition=1;
+
+mode.base_design=true;
+mode.morph_design=false;
+mode.trim=true;
 
 struc.m_fuel=0;
 struc.pos_fuel=[0 0 0];
@@ -44,12 +48,24 @@ V_service=357*0.44704;
 i_AS=[0.6 1.2]*V_service/100;
 
 % i_actmass=[0 0;100 100];
-i_actmass=[0 300]'/100;
+i_actmass=[0 300]/100;
 
+if ~mode.morph_design
+    i_rot_angle=[0 0]*pi/180;
+    i_rot_azimuth=[0 0]*pi/180;
+    i_rot_elevation=[0 0]*pi/180;
+    i_actmass=[0 0];
+end
+if ~mode.trim
+    i_alpha=[5 5]*pi/180;
+    i_elevator_angle=[0 0]*pi/180;
+    i_throttle=[1 1];
+    i_AS=[1 1]*V_service/100;
+end
 
 
 b1=[i_Xwing' i_Zwing' i_bfrac1' i_sweep_angle' i_twist_angle'];
-b2=i_actmass;
+b2=i_actmass';
 b3=[i_rot_angle' i_rot_azimuth' i_rot_elevation'];
 b4=[i_alpha' i_elevator_angle' i_throttle' i_AS'];
 
