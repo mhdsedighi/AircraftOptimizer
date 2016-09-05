@@ -19,7 +19,7 @@ all_state(2).ALT=20000*0.3048;
 
 
 N_design=5;
-N_morph=4;
+N_morph=3;
 N_trim=4;
 N_act=1;
 N_t=N_design+N_morph+N_trim+N_act;
@@ -34,7 +34,8 @@ i_twist_angle=[0 10]*pi/180;
 
 % i_course_portion=[0 0.5];
 i_rot_angle=[0 0]*pi/180;
-i_Raxle_local=[1 0 0;1 0 0];
+i_rot_azimuth=[-20 20]*pi/180;
+i_rot_elevation=[-20 20]*pi/180;
 
 i_alpha=[0 10]*pi/180;
 i_elevator_angle=[-20 20]*pi/180;
@@ -49,7 +50,7 @@ i_actmass=[0 300]'/100;
 
 b1=[i_Xwing' i_Zwing' i_bfrac1' i_sweep_angle' i_twist_angle'];
 b2=i_actmass;
-b3=[i_rot_angle' i_Raxle_local];
+b3=[i_rot_angle' i_rot_azimuth' i_rot_elevation'];
 b4=[i_alpha' i_elevator_angle' i_throttle' i_AS'];
 
 
@@ -91,7 +92,7 @@ input=input1;
 LB=lb1;
 UB=ub1;
 for i=1:N_condition
-    %     if i==1 || i==2 || i==3
+    %     if i==1 || i==2 || i==3 %%% speed freezed
     %         LB=[LB lb2_prime];
     %         UB=[UB ub2_prime];
     %         input=[input input2_prime];
@@ -138,7 +139,7 @@ options = gaoptimset(options,'InitialPopulation', input);
 options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
 options = saoptimset(options,'PlotInterval',3);
 options = gaoptimset(options,'Display', 'iter');
-options = gaoptimset(options,'UseParallel', 'always');
+% options = gaoptimset(options,'UseParallel', 'always');
 
 options = gaoptimset(options,'PopulationSize', 30);
 % options = gaoptimset(options,'EliteCount', EliteCount);

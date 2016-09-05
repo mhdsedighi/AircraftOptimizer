@@ -13,7 +13,7 @@ act_out=act;
 [~,N]=size(act(1).M_scalar);
 M=zeros(1,N);
 for i=1:N
-    M(i)=abs(act(1).M_scalar(i));
+    M(i)=abs(act(1).M_scalar(i));  %% maximum moment
 end
 
 % act_out.mass=max(M)/1000;

@@ -20,7 +20,7 @@ twist=design_code(5);
 alpha=trim_code(1);
 elevator_angle=trim_code(2);
 throttle=trim_code(3);
-AS=trim_code(4)*100;
+AS=trim_code(4)*100; %scale chnage
 
 geo.startx(1)=geo.startx(1)+Xwing;
 geo.startz(1)=geo.startz(1)+Zwing;
@@ -59,26 +59,32 @@ CD0=sum(sum(CD0_wing))+sum(CD0_blunt);
 results.CD0=CD0;
 
 [lattice,ref]=fLattice_setup2(geo,state,lattictype,ref);
-Raxle=[0 1 0];
-hinge_pos=squeeze(lattice.XYZ(1,1,:))';
-[lattice]=wingrotation2(wingno,geo,lattice,Raxle,hinge_pos,twist);
+if twist~=0
+    Raxle=[0 1 0];
+    hinge_pos=squeeze(lattice.XYZ(1,1,:))';
+    [lattice]=wingrotation2(wingno,geo,lattice,Raxle,hinge_pos,twist);
+end
 
 
 
-% 
+%
 % partno=3;
 % act_num=1;
 % course_portion=morph_code(1);
 % [geo,lattice,struc,act]=telescoping(act_num,geo,ref,lattice,results,state,struc,act,wingno,partno,course_portion);
 
-
-partno=3;
-act_num=1;
-rot_angle=morph_code(1);
-Raxle_local=morph_code(2:4);
-hinge_portion=0.5;
-[geo,lattice,struc,act]=part_rotation(act_num,geo,lattice,results,struc,state,act,wingno,partno,Raxle_local,rot_angle,hinge_portion,ref);
-
+if morph_code~=zeros(1,length(morph_code))
+    partno=3;
+    act_num=1;
+    rot_angle=morph_code(1);
+    azimuth=morph_code(2);
+    elevation=morph_code(3);
+    [xa,ya,za]= sph2cart(azimuth+pi/2,elevation,1);
+    Raxle_local=[xa,ya,za];
+    hinge_portion=0.5;
+    [geo,lattice,struc,act]=part_rotation(act_num,geo,lattice,results,struc,state,act,wingno,partno,Raxle_local,rot_angle,hinge_portion,ref);
+    
+end
 
 
 

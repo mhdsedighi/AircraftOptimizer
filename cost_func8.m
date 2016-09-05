@@ -42,16 +42,20 @@ else
     end
 end
 
-mass_error_mat=zeros(N_act,N_condition);
-for i=1:N_act
-    for k=1:N_condition
-        [all_act_out(k,i)]=actuator_sizing(all_act(k,i));
-        if abs(all_act_out(k,i).mass_guess-all_act(k,i).mass_guess)>mass_error_mat(i,k)
-            mass_error_mat(i,k)=abs(all_act_out(k,i).mass_guess-all_act(k,i).mass_guess);
+if morph_code~=zeros(size(morph_code))
+    mass_error_mat=zeros(N_act,N_condition);
+    for i=1:N_act
+        for k=1:N_condition
+            [all_act_out(k,i)]=actuator_sizing(all_act(k,i));
+            if abs(all_act_out(k,i).mass_guess-all_act(k,i).mass_guess)>mass_error_mat(i,k)
+                mass_error_mat(i,k)=abs(all_act_out(k,i).mass_guess-all_act(k,i).mass_guess);
+            end
         end
     end
+    mass_error=max(mass_error_mat(1,:));
+else
+    mass_error=0;
 end
-mass_error=max(mass_error_mat(1,:));
 
 
 % [act_out]=actuator_sizing(act);
@@ -60,9 +64,9 @@ mass_error=max(mass_error_mat(1,:));
 % s1=abs(all_state(1).AS/(all_engine(1).fuelFlow)+1)+abs(all_state(2).AS/(all_engine(2).fuelFlow+1))+abs(all_state(3).AS/(all_engine(3).fuelFlow)+1);
 % s2=all_perf(4).ROC;
 % s3=all_state(2).AS;
-% 
+%
 % s4=sum(all_trim_cost)+mass_error;
-% 
+%
 % cost=-s1-s2-s3+s4;
 
 cost_trim=sum(all_trim_cost);
@@ -72,7 +76,7 @@ cost_trim=sum(all_trim_cost);
 % perf_cost2=all_state(4).AS;
 % perf_cost3=abs(all_perf(5).ROC);
 % morph_cost=max(abs(morph_code(:,1)));
-% 
+%
 % cost=1/(perf_cost1+perf_cost2+perf_cost3)*cost_trim*mass_error*(abs(morph_cost))^0.5;
 
 cost=cost_trim;
