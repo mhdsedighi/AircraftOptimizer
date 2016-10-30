@@ -1,6 +1,8 @@
 
 finilize=0;
-N_condition=1;
+N_condition=5;
+
+plotoption.album=true;
 
 mode.base_design=true;
 mode.morph_design=false;
@@ -20,7 +22,7 @@ all_struc(2).m_fuel=W_f*0.8;
 
 
 all_state(2).ALT=20000*0.3048;
-method='ga';
+method='sa';
 
 N_design=5;
 N_morph=3;
@@ -135,7 +137,7 @@ if method=='sa'
     % options = saoptimset(options,'ReannealInterval', ReannealInterval);
     options = saoptimset(options,'HybridInterval', 'end');
     options = saoptimset(options,'Display', 'iter');
-    % options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
+    options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
     % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
     options = saoptimset(options,'PlotInterval',3);
     options = saoptimset(options,'DisplayInterval',1);
@@ -194,30 +196,48 @@ cost=cost_func8(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_st
 
 %%%%test
 % % % %
-% % design_code(1:N_design)=input(1:N_design);
-% % actmass_code(1:N_act)=input(N_design+1:N_design+N_act);
-% %
-% % inputmat=vector2matrix(input(N_design+N_act+1:end),N_condition,N_trim+N_morph);
-% %
-% % for j=1:N_condition
-% %     morph_code(j,1:N_morph)=inputmat(j,1:N_morph);
-% %     trim_code(j,1:N_trim)=inputmat(j,N_morph+1:N_morph+N_trim);
-% % end
-% %
-% % for j=1:N_condition
-% % [all_aero(j),all_perf(j),all_trim_cost(j),all_act(j,:),all_state2(j),all_geo(j),all_struc2(j),all_engine(j),all_ref(j)]=compute_aircraft(design_code,morph_code(j,:),trim_code(j,:),actmass_code,all_state(j),geo,all_struc(j),body,act,engine,ref)
-% % end
-% %%%%%
+% design_code(1:N_design)=x(1:N_design);
+% actmass_code(1:N_act)=x(N_design+1:N_design+N_act);
+% 
+% inputmat=vector2matrix(x(N_design+N_act+1:end),N_condition,N_trim+N_morph);
+% 
+% for j=1:N_condition
+%     morph_code(j,1:N_morph)=inputmat(j,1:N_morph);
+%     trim_code(j,1:N_trim)=inputmat(j,N_morph+1:N_morph+N_trim);
+% end
+% 
+% for j=1:N_condition
+%     [ans_aero(j),ans_perf(j),ans_trim_cost(j),ans_act(j,:),ans_state2(j),ans_geo(j),ans_struc2(j),ans_engine(j),ans_ref(j)]=compute_aircraft8(design_code,morph_code(j,:),trim_code(j,:),actmass_code,ans_state(j),geo,ans_struc(j),body,act,engine,ref)
+% end
+% % %%%%%
 
 
 
-
-
+if plotoption.album
+    m=floor(sqrt(N_condition));
+    n=floor(N_condition/m);
+    if m*n<N_condition
+        m=m+1;
+    end
+    figure
+    count=0;
+    for i=1:m
+        for j=1:n
+            count=count+1;
+            if count<=N_condition;
+                subplot(m,n,count)
+                plot_plane(body,ans_geo(count),ans_struc(count));
+            end
+        end
+    end
+end
 
 % max(abs(ans_act(1).movement))
 % ans_act(1).energy
 % max(abs(ans_act(1).M))
-%
+
+
+
 % close all
 %
 % plot_plane(body,ans_geo(1),ans_struc(1))
