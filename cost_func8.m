@@ -15,11 +15,13 @@ end
 if finilize
     for k=1:N_condition
         [aero,all_perf(k),all_trim_cost(k),all_act(k,:),all_state2(k),all_geo(k),all_struc2(k),all_engine(k),all_ref(k)] = compute_aircraft8(design_code,morph_code(k,:),trim_code(k,:),actmass_code,all_state(k),geo,all_struc(k),body,act,engine,ref);
-        aero.sonicCP=0;
-        aero.sonicWarning=0;
-        aero.sonicFraction=0;
-        temp_aero=sortstruct(aero);
-        all_aero(k)=temp_aero;
+        if ~isfield(aero, 'sonicCP') || ~isfield(aero, 'sonicWarning') || ~isfield(aero, 'sonicFraction') %% check sonic warning
+            aero.sonicCP=0;
+            aero.sonicWarning=0;
+            aero.sonicFraction=0;
+            temp_aero=sortstruct(aero);
+            all_aero(k)=temp_aero;
+        end
     end
     assignin('base','ans_aero',all_aero);
     assignin('base','ans_perf',all_perf);
