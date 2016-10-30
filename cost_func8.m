@@ -19,9 +19,9 @@ if finilize
             aero.sonicCP=0;
             aero.sonicWarning=0;
             aero.sonicFraction=0;
-            temp_aero=sortstruct(aero);
-            all_aero(k)=temp_aero;
         end
+        temp_aero=sortstruct(aero);
+        all_aero(k)=temp_aero;
     end
     assignin('base','ans_aero',all_aero);
     assignin('base','ans_perf',all_perf);
@@ -41,7 +41,14 @@ else
     for k=1:N_condition
         
         [~,all_perf(k),all_trim_cost(k),all_act(k,:),~,~,~,all_engine(k),~] = compute_aircraft8(design_code,morph_code(k,:),trim_code(k,:),actmass_code,all_state(k),geo,all_struc(k),body,act,engine,ref);
-        %     x(j)=all_act;
+        
+        %          % somtimes this code must be used instead of above for ga algoythm for preventing error: Subscripted assignment between dissimilar structures
+        %         [~,temp_perf,temp_trim_cost,temp_act,~,~,~,temp_engine,~] = compute_aircraft8(design_code,morph_code(k,:),trim_code(k,:),actmass_code,all_state(k),geo,all_struc(k),body,act,engine,ref);
+        %         all_perf(k)=sortstruct(temp_perf);
+        %         all_trim_cost(k)=temp_trim_cost;
+        %         all_act(k,:)=sortstruct(temp_act);
+        %         all_engine(k)=sortstruct(temp_engine);
+        %         x(j)=all_act;
     end
 end
 
