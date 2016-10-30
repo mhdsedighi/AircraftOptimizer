@@ -18,7 +18,8 @@ if finilize
         aero.sonicCP=0;
         aero.sonicWarning=0;
         aero.sonicFraction=0;
-        all_aero(k)=aero;
+        temp_aero=sortstruct(aero);
+        all_aero(k)=temp_aero;
     end
     assignin('base','ans_aero',all_aero);
     assignin('base','ans_perf',all_perf);
