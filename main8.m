@@ -20,7 +20,7 @@ all_struc(2).m_fuel=W_f*0.8;
 
 
 all_state(2).ALT=20000*0.3048;
-
+method='ga';
 
 N_design=5;
 N_morph=3;
@@ -123,58 +123,59 @@ end
 
 fun=@(input)cost_func8(input,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
 
-% % % %%%%%% Starting with the default options for Simulated Annealing
-% % % options = saoptimset;
-% % % % %% Modifying options setting for Simulated Annealing
-% % % % options = saoptimset(options,'TolFun', Optimization_Tolerance);
-% % % % options = saoptimset(options,'MaxFunEvals', MaxFunctionEvaluation);
-% % % % options = saoptimset(options,'MaxIter', MaxIteration);
-% % % % options = saoptimset(options,'StallIterLimit', StallIterLimit_Data);
-% % % % options = saoptimset(options,'InitialTemperature', InitialTemperature);
-% % % % options = saoptimset(options,'ReannealInterval', ReannealInterval);
-% % % options = saoptimset(options,'HybridInterval', 'end');
-% % % options = saoptimset(options,'Display', 'iter');
-% % % options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
-% % % % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
-% % % options = saoptimset(options,'PlotInterval',3);
-% % % options = saoptimset(options,'DisplayInterval',1);
-% % % 
-% % % 
-% % % % %% Running Simulated Annealing for finding minimum of Electricity Cost
-% % % [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
-
-
-%
-%%% Starting with the default options
-options = gaoptimset;
-%%% Modifying options setting
-options = gaoptimset(options,'InitialPopulation', input);
-% options = gaoptimset(options,'StallGenLimit', Stall_Limit);
-% options = gaoptimset(options,'TolFun', Optimization_Tolerance);
-% options = gaoptimset(options,'TolCon',Costraint_Tolerance);
-options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
-options = saoptimset(options,'PlotInterval',3);
-options = gaoptimset(options,'Display', 'iter');
-% options = gaoptimset(options,'UseParallel', 'always');
-
-options = gaoptimset(options,'PopulationSize', 30);
-% options = gaoptimset(options,'EliteCount', EliteCount);
-% options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
-% options = gaoptimset(options,'MigrationInterval', MigrationInterval);
-% options = gaoptimset(options,'MigrationFraction', MigrationFraction);
-options = gaoptimset(options,'Generations', 1000);
-% options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
-% options = gaoptimset(options,'InitialPenalty', InitialPenalty);
-
-[x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
-
-% % options = psoptimset;
-% % options.Display='Iter';
-% % options.PlotFcns={@psplotbestf @psplotbestx};
-% % x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
-%
-%
-%
+if method=='sa'
+    %%%%%% Starting with the default options for Simulated Annealing
+    options = saoptimset;
+    % %% Modifying options setting for Simulated Annealing
+    % options = saoptimset(options,'TolFun', Optimization_Tolerance);
+    % options = saoptimset(options,'MaxFunEvals', MaxFunctionEvaluation);
+    % options = saoptimset(options,'MaxIter', MaxIteration);
+    % options = saoptimset(options,'StallIterLimit', StallIterLimit_Data);
+    % options = saoptimset(options,'InitialTemperature', InitialTemperature);
+    % options = saoptimset(options,'ReannealInterval', ReannealInterval);
+    options = saoptimset(options,'HybridInterval', 'end');
+    options = saoptimset(options,'Display', 'iter');
+    % options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
+    % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
+    options = saoptimset(options,'PlotInterval',3);
+    options = saoptimset(options,'DisplayInterval',1);
+    
+    
+    % %% Running Simulated Annealing for finding minimum of Electricity Cost
+    [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
+elseif method=='ga'
+    
+    %
+    %%% Starting with the default options
+    options = gaoptimset;
+    %%% Modifying options setting
+    options = gaoptimset(options,'InitialPopulation', input);
+    % options = gaoptimset(options,'StallGenLimit', Stall_Limit);
+    % options = gaoptimset(options,'TolFun', Optimization_Tolerance);
+    % options = gaoptimset(options,'TolCon',Costraint_Tolerance);
+    options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
+    options = saoptimset(options,'PlotInterval',3);
+    options = gaoptimset(options,'Display', 'iter');
+    options = gaoptimset(options,'UseParallel', 'always');
+    
+    options = gaoptimset(options,'PopulationSize', 30);
+    % options = gaoptimset(options,'EliteCount', EliteCount);
+    % options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
+    % options = gaoptimset(options,'MigrationInterval', MigrationInterval);
+    % options = gaoptimset(options,'MigrationFraction', MigrationFraction);
+    options = gaoptimset(options,'Generations', 1000);
+    % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
+    % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
+    
+    [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+elseif method=='ps'
+    
+    options = psoptimset;
+    options.Display='Iter';
+    options.PlotFcns={@psplotbestf @psplotbestx};
+    x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
+    
+end
 
 % x=input;
 finilize=1;
