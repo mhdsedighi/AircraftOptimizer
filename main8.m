@@ -173,8 +173,15 @@ elseif method=='ps'
     options = psoptimset;
     options.Display='Iter';
     options.PlotFcns={@psplotbestf @psplotbestx};
-    x = patternsearch(fun,input,[],[],[],[],LB,UB,options)
+    x = patternsearch(fun,input,[],[],[],[],LB,UB,options);
     
+elseif method=='psw'
+    options = optimoptions('particleswarm','SwarmSize',5,'HybridFcn',@fmincon);
+    options.Display='iter';
+    options.UseParallel=true;
+    options.PlotFcns={@pswplotbestf};
+    rng default  % For reproducibility
+    [x,fval,exitflag,output] = particleswarm(fun,length(input),LB,UB,options);
 end
 
 % x=input;
@@ -183,12 +190,7 @@ cost=cost_func8(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_st
 
 
 
-% options = optimoptions('particleswarm','SwarmSize',5,'HybridFcn',@fmincon);
-% options.Display='iter';
-% options.UseParallel=true;
-% options.PlotFcns={@pswplotbestf};
-% rng default  % For reproducibility
-% [x,fval,exitflag,output] = particleswarm(fun,length(input),LB,UB,options)
+
 
 %%%%test
 % % % %
