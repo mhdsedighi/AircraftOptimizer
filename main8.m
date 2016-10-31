@@ -1,12 +1,16 @@
-
-finilize=0;
-N_condition=5;
+close all
+finilize=1;
+N_condition=1;
 
 plotoption.album=true;
 
 mode.base_design=true;
-mode.morph_design=false;
+mode.morph_design=true;
 mode.trim=true;
+
+morphmode='only_sweep';
+% morphmode='only_dihedral';
+% morphmode='only_twist';
 
 struc.m_fuel=0;
 struc.pos_fuel=[0 0 0];
@@ -39,7 +43,7 @@ i_twist_angle=[0 10]*pi/180;
 
 
 % i_course_portion=[0 0.5];
-i_rot_angle=[0 0]*pi/180;
+i_rot_angle=[45 45]*pi/180;
 i_rot_azimuth=[-20 20]*pi/180;
 i_rot_elevation=[-20 20]*pi/180;
 
@@ -58,6 +62,18 @@ if ~mode.morph_design
     i_rot_elevation=[0 0]*pi/180;
     i_actmass=[0 0];
 end
+
+if morphmode=='only_sweep'
+    i_rot_azimuth=[0 0]*pi/180;
+    i_rot_elevation=[90 90]*pi/180;
+elseif morphmode=='only_dihedral'
+    i_rot_azimuth=[90 90]*pi/180;
+    i_rot_elevation=[0 0]*pi/180;
+elseif morphmode=='only_twist'
+    i_rot_azimuth=[0 0]*pi/180;
+    i_rot_elevation=[0 0]*pi/180;
+end
+
 if ~mode.trim
     i_alpha=[5 5]*pi/180;
     i_elevator_angle=[0 0]*pi/180;
@@ -125,67 +141,70 @@ end
 
 fun=@(input)cost_func8(input,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
 
-if method=='sa'
-    %%%%%% Starting with the default options for Simulated Annealing
-    options = saoptimset;
-    % %% Modifying options setting for Simulated Annealing
-    % options = saoptimset(options,'TolFun', Optimization_Tolerance);
-    % options = saoptimset(options,'MaxFunEvals', MaxFunctionEvaluation);
-    % options = saoptimset(options,'MaxIter', MaxIteration);
-    % options = saoptimset(options,'StallIterLimit', StallIterLimit_Data);
-    % options = saoptimset(options,'InitialTemperature', InitialTemperature);
-    % options = saoptimset(options,'ReannealInterval', ReannealInterval);
-    options = saoptimset(options,'HybridInterval', 'end');
-    options = saoptimset(options,'Display', 'iter');
-    options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
-    % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
-    options = saoptimset(options,'PlotInterval',3);
-    options = saoptimset(options,'DisplayInterval',1);
-    
-    
-    % %% Running Simulated Annealing for finding minimum of Electricity Cost
-    [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
-elseif method=='ga'
-    
-    %
-    %%% Starting with the default options
-    options = gaoptimset;
-    %%% Modifying options setting
-    options = gaoptimset(options,'InitialPopulation', input);
-    % options = gaoptimset(options,'StallGenLimit', Stall_Limit);
-    % options = gaoptimset(options,'TolFun', Optimization_Tolerance);
-    % options = gaoptimset(options,'TolCon',Costraint_Tolerance);
-    options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
-    options = saoptimset(options,'PlotInterval',3);
-    options = gaoptimset(options,'Display', 'iter');
-    options = gaoptimset(options,'UseParallel', 'always');
-    
-    options = gaoptimset(options,'PopulationSize', 30);
-    % options = gaoptimset(options,'EliteCount', EliteCount);
-    % options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
-    % options = gaoptimset(options,'MigrationInterval', MigrationInterval);
-    % options = gaoptimset(options,'MigrationFraction', MigrationFraction);
-    options = gaoptimset(options,'Generations', 1000);
-    % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
-    % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
-    
-    [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
-elseif method=='ps'
-    
-    options = psoptimset;
-    options.Display='Iter';
-    options.PlotFcns={@psplotbestf @psplotbestx};
-    x = patternsearch(fun,input,[],[],[],[],LB,UB,options);
-    
-elseif method=='psw'
-    options = optimoptions('particleswarm','SwarmSize',5,'HybridFcn',@fmincon);
-    options.Display='iter';
-    options.UseParallel=true;
-    options.PlotFcns={@pswplotbestf};
-    rng default  % For reproducibility
-    [x,fval,exitflag,output] = particleswarm(fun,length(input),LB,UB,options);
+if ~finilize
+    if method=='sa'
+        %%%%%% Starting with the default options for Simulated Annealing
+        options = saoptimset;
+        % %% Modifying options setting for Simulated Annealing
+        % options = saoptimset(options,'TolFun', Optimization_Tolerance);
+        % options = saoptimset(options,'MaxFunEvals', MaxFunctionEvaluation);
+        % options = saoptimset(options,'MaxIter', MaxIteration);
+        % options = saoptimset(options,'StallIterLimit', StallIterLimit_Data);
+        % options = saoptimset(options,'InitialTemperature', InitialTemperature);
+        % options = saoptimset(options,'ReannealInterval', ReannealInterval);
+        options = saoptimset(options,'HybridInterval', 'end');
+        options = saoptimset(options,'Display', 'iter');
+        options = saoptimset(options,'PlotFcns', {  @saplotbestf @saplotbestx });
+        % options = saoptimset(options,'PlotFcns',{@saplotbestx,@saplotbestf,@saplotx,@saplotf});
+        options = saoptimset(options,'PlotInterval',3);
+        options = saoptimset(options,'DisplayInterval',1);
+        
+        
+        % %% Running Simulated Annealing for finding minimum of Electricity Cost
+        [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
+    elseif method=='ga'
+        
+        %
+        %%% Starting with the default options
+        options = gaoptimset;
+        %%% Modifying options setting
+        options = gaoptimset(options,'InitialPopulation', input);
+        % options = gaoptimset(options,'StallGenLimit', Stall_Limit);
+        % options = gaoptimset(options,'TolFun', Optimization_Tolerance);
+        % options = gaoptimset(options,'TolCon',Costraint_Tolerance);
+        options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
+        options = saoptimset(options,'PlotInterval',3);
+        options = gaoptimset(options,'Display', 'iter');
+        options = gaoptimset(options,'UseParallel', 'always');
+        
+        options = gaoptimset(options,'PopulationSize', 30);
+        % options = gaoptimset(options,'EliteCount', EliteCount);
+        % options = gaoptimset(options,'CrossoverFraction', CrossoverFraction);
+        % options = gaoptimset(options,'MigrationInterval', MigrationInterval);
+        % options = gaoptimset(options,'MigrationFraction', MigrationFraction);
+        options = gaoptimset(options,'Generations', 1000);
+        % options = gaoptimset(options,'PenaltyFactor', PenaltyFactor);
+        % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
+        
+        [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
+    elseif method=='ps'
+        
+        options = psoptimset;
+        options.Display='Iter';
+        options.PlotFcns={@psplotbestf @psplotbestx};
+        x = patternsearch(fun,input,[],[],[],[],LB,UB,options);
+        
+    elseif method=='psw'
+        options = optimoptions('particleswarm','SwarmSize',5,'HybridFcn',@fmincon);
+        options.Display='iter';
+        options.UseParallel=true;
+        options.PlotFcns={@pswplotbestf};
+        rng default  % For reproducibility
+        [x,fval,exitflag,output] = particleswarm(fun,length(input),LB,UB,options);
+    end
+else
+    x=input;
 end
-
 % x=input;
 finilize=1;
 cost=cost_func8(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
@@ -198,14 +217,14 @@ cost=cost_func8(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_st
 % % % %
 % design_code(1:N_design)=x(1:N_design);
 % actmass_code(1:N_act)=x(N_design+1:N_design+N_act);
-% 
+%
 % inputmat=vector2matrix(x(N_design+N_act+1:end),N_condition,N_trim+N_morph);
-% 
+%
 % for j=1:N_condition
 %     morph_code(j,1:N_morph)=inputmat(j,1:N_morph);
 %     trim_code(j,1:N_trim)=inputmat(j,N_morph+1:N_morph+N_trim);
 % end
-% 
+%
 % for j=1:N_condition
 %     [ans_aero(j),ans_perf(j),ans_trim_cost(j),ans_act(j,:),ans_state2(j),ans_geo(j),ans_struc2(j),ans_engine(j),ans_ref(j)]=compute_aircraft8(design_code,morph_code(j,:),trim_code(j,:),actmass_code,ans_state(j),geo,ans_struc(j),body,act,engine,ref)
 % end

@@ -79,7 +79,7 @@ if morph_code(1)~=0 || morph_code(2)~=0 || morph_code(3)~=0
     rot_angle=morph_code(1);
     azimuth=morph_code(2);
     elevation=morph_code(3);
-    [xa,ya,za]= sph2cart(azimuth+pi/2,elevation,1);
+    [xa,ya,za]= sph2cart(azimuth,elevation,1);
     Raxle_local=[xa,ya,za];
     hinge_portion=0.5;
     [geo,lattice,struc,act]=part_rotation(act_num,geo,lattice,results,struc,state,act,wingno,partno,Raxle_local,rot_angle,hinge_portion,ref);
