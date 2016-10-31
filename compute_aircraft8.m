@@ -73,7 +73,7 @@ end
 % course_portion=morph_code(1);
 % [geo,lattice,struc,act]=telescoping(act_num,geo,ref,lattice,results,state,struc,act,wingno,partno,course_portion);
 
-if morph_code~=zeros(1,length(morph_code))
+if morph_code(1)~=0 || morph_code(2)~=0 || morph_code(2)~=0
     partno=3;
     act_num=1;
     rot_angle=morph_code(1);

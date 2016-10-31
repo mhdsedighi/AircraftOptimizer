@@ -40,7 +40,8 @@ Raxle_local=Raxle_local/norm(Raxle_local);
 Raxle=(T'*Raxle_local')';
 
 hinge_pos=squeeze(svertex_info.X1(wingno,partno,:)+hinge_portion*(svertex_info.X2(wingno,partno,:)-svertex_info.X1(wingno,partno,:)));
-% 
+
+%%% plotting rotation axis
 % plotvec( hinge_pos,act_vec1*3,'r')
 % plotvec( hinge_pos,act_vec2*3,'g')
 % plotvec( hinge_pos,act_vec3*3,'b')
