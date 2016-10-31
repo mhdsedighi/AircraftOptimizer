@@ -1,10 +1,12 @@
 close all
-finilize=1;
-N_condition=1;
+finilize=0;
 
-plotoption.album=true;
+N_condition=2;
 
-mode.base_design=true;
+plotmode.album=true;
+plotmode.interlaced=true;
+
+mode.base_design=false;
 mode.morph_design=true;
 mode.trim=true;
 
@@ -26,7 +28,7 @@ all_struc(2).m_fuel=W_f*0.8;
 
 
 all_state(2).ALT=20000*0.3048;
-method='sa';
+opt_method='sa';
 
 N_design=5;
 N_morph=3;
@@ -37,13 +39,13 @@ N_t=N_design+N_morph+N_trim+N_act;
 i_Xwing=[-0.5 0.5];
 i_Zwing=[-0.2 0.2];
 i_bfrac1=[0.01 0.5];
-i_sweep_angle=[0 10]*pi/180;
-i_twist_angle=[0 10]*pi/180;
+i_sweep_angle=[-10 -10]*pi/180;
+i_twist_angle=[0 0]*pi/180;
 % i_taper=[0.1 1]*pi/180;
 
 
 % i_course_portion=[0 0.5];
-i_rot_angle=[45 45]*pi/180;
+i_rot_angle=[-45 45]*pi/180;
 i_rot_azimuth=[-20 20]*pi/180;
 i_rot_elevation=[-20 20]*pi/180;
 
@@ -56,22 +58,25 @@ i_AS=[0.6 1.2]*V_service/100;
 % i_actmass=[0 0;100 100];
 i_actmass=[0 300]/100;
 
-if ~mode.morph_design
+if mode.base_design
+    N_condition=1;
+end
+if mode.morph_design
+    if morphmode=='only_sweep'
+        i_rot_azimuth=[0 0]*pi/180;
+        i_rot_elevation=[90 90]*pi/180;
+    elseif morphmode=='only_dihedral'
+        i_rot_azimuth=[90 90]*pi/180;
+        i_rot_elevation=[0 0]*pi/180;
+    elseif morphmode=='only_twist'
+        i_rot_azimuth=[0 0]*pi/180;
+        i_rot_elevation=[0 0]*pi/180;
+    end
+else
     i_rot_angle=[0 0]*pi/180;
     i_rot_azimuth=[0 0]*pi/180;
     i_rot_elevation=[0 0]*pi/180;
     i_actmass=[0 0];
-end
-
-if morphmode=='only_sweep'
-    i_rot_azimuth=[0 0]*pi/180;
-    i_rot_elevation=[90 90]*pi/180;
-elseif morphmode=='only_dihedral'
-    i_rot_azimuth=[90 90]*pi/180;
-    i_rot_elevation=[0 0]*pi/180;
-elseif morphmode=='only_twist'
-    i_rot_azimuth=[0 0]*pi/180;
-    i_rot_elevation=[0 0]*pi/180;
 end
 
 if ~mode.trim
@@ -142,7 +147,7 @@ end
 fun=@(input)cost_func8(input,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_struc,body,act,engine,ref,finilize);
 
 if ~finilize
-    if method=='sa'
+    if opt_method=='sa'
         %%%%%% Starting with the default options for Simulated Annealing
         options = saoptimset;
         % %% Modifying options setting for Simulated Annealing
@@ -162,7 +167,7 @@ if ~finilize
         
         % %% Running Simulated Annealing for finding minimum of Electricity Cost
         [x,fval,exitflag,output] = simulannealbnd(fun,input,LB,UB,options);
-    elseif method=='ga'
+    elseif opt_method=='ga'
         
         %
         %%% Starting with the default options
@@ -187,14 +192,14 @@ if ~finilize
         % options = gaoptimset(options,'InitialPenalty', InitialPenalty);
         
         [x,fval,exitflag,output,population,score] = ga(fun,length(input),[],[],[],[],LB,UB,[],[],options);
-    elseif method=='ps'
+    elseif opt_method=='ps'
         
         options = psoptimset;
         options.Display='Iter';
         options.PlotFcns={@psplotbestf @psplotbestx};
         x = patternsearch(fun,input,[],[],[],[],LB,UB,options);
         
-    elseif method=='psw'
+    elseif opt_method=='psw'
         options = optimoptions('particleswarm','SwarmSize',5,'HybridFcn',@fmincon);
         options.Display='iter';
         options.UseParallel=true;
@@ -232,7 +237,7 @@ cost=cost_func8(x,N_condition,N_design,N_morph,N_trim,N_act,all_state,geo,all_st
 
 
 
-if plotoption.album
+if plotmode.album
     m=floor(sqrt(N_condition));
     n=floor(N_condition/m);
     if m*n<N_condition
@@ -249,6 +254,14 @@ if plotoption.album
             end
         end
     end
+end
+if plotmode.interlaced
+    figure
+    %    hold on
+    for i=1:N_condition
+        plot_plane(body,ans_geo(i),ans_struc(i));
+    end
+    
 end
 
 % max(abs(ans_act(1).movement))
