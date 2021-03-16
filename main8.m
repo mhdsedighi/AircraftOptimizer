@@ -1,5 +1,6 @@
 close all
 finilize=0;
+gaparallel=false;
 
 N_condition=2;
 
@@ -28,7 +29,13 @@ all_struc(2).m_fuel=W_f*0.8;
 
 
 all_state(2).ALT=20000*0.3048;
+
+%%%% optimization method
+% opt_method='ga';
+% gaparallel=true;    %%% if want to use paralle computing in genetic algorithm
 opt_method='sa';
+% opt_method='ps';
+% opt_method='psw';
 
 N_design=5;
 N_morph=3;
@@ -180,7 +187,9 @@ if ~finilize
         options = gaoptimset(options,'PlotFcns', { @gaplotbestf @gaplotbestindiv });
         options = saoptimset(options,'PlotInterval',3);
         options = gaoptimset(options,'Display', 'iter');
+        if gaparallel
         options = gaoptimset(options,'UseParallel', 'always');
+        end
         
         options = gaoptimset(options,'PopulationSize', 30);
         % options = gaoptimset(options,'EliteCount', EliteCount);
