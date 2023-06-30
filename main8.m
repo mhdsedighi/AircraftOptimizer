@@ -69,13 +69,13 @@ if mode.base_design
     N_condition=1;
 end
 if mode.morph_design
-    if morphmode=='only_sweep'
+    if strcmp(morphmode,'only_sweep')
         i_rot_azimuth=[0 0]*pi/180;
         i_rot_elevation=[90 90]*pi/180;
-    elseif morphmode=='only_dihedral'
+    elseif strcmp(morphmode,'only_dihedral')
         i_rot_azimuth=[90 90]*pi/180;
         i_rot_elevation=[0 0]*pi/180;
-    elseif morphmode=='only_twist'
+    elseif strcmp(morphmode,'only_twist')
         i_rot_azimuth=[0 0]*pi/180;
         i_rot_elevation=[0 0]*pi/180;
     end
