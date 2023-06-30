@@ -1,4 +1,4 @@
-% clc
+clc
 clear
 close all
 global doplot
@@ -342,7 +342,7 @@ partno=3;
 [results]=solver9(results,state,geo,lattice,ref);
 [results]=coeff_create3(results,lattice,state,ref,geo);
 
-
+perf=performance_calc(results,state,struc,engine,ref);
 
 lsize=size(results.F);
 panels=lsize(1);
