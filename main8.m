@@ -1,20 +1,28 @@
-close all
-finilize=0;
-gaparallel=false;
+%%% run: 'initial' first
 
+
+% number of conditions that the aircraft in evaluated in:
 N_condition=2;
 
+% final plotting type(s)
 plotmode.album=true;
 plotmode.interlaced=true;
 
+% Design mode (Basic Design, Morphing)
+
 mode.base_design=false;
 mode.morph_design=true;
+
+% tram the aircraft in each step?
 mode.trim=true;
+
+% narrow the type of morphing, you can select none
 
 morphmode='only_sweep';
 % morphmode='only_dihedral';
 % morphmode='only_twist';
 
+% structural weight
 struc.m_fuel=0;
 struc.pos_fuel=[0 0 0];
 
@@ -28,21 +36,30 @@ all_struc(1).m_fuel=W_f*0.8;
 all_struc(2).m_fuel=W_f*0.8;
 
 
+% selecting states of flight
 all_state(2).ALT=20000*0.3048;
 
-%%%% optimization method
+% select optimization method
+
 % opt_method='ga';
 % gaparallel=true;    %%% if want to use paralle computing in genetic algorithm
 opt_method='sa';
 % opt_method='ps';
 % opt_method='psw';
 
+close all
+finilize=0;
+gaparallel=false;
+
+
+% enumarating degrees of freedom
 N_design=5;
 N_morph=3;
 N_trim=4;
 N_act=1;
 N_t=N_design+N_morph+N_trim+N_act;
 
+% the span of optimization space
 i_Xwing=[-0.5 0.5];
 i_Zwing=[-0.2 0.2];
 i_bfrac1=[0.01 0.5];
@@ -277,11 +294,27 @@ end
 % ans_act(1).energy
 % max(abs(ans_act(1).M))
 
+% final results
+
+%Aircraft Geometrical data:
+ans_geo
+%Aircraft Structural & Weight Data:
+ans_struc
+%Aircraft Aerodynamic Data:
+ans_aero
+% Morphing's Actuators Data
+ans_act
 
 
-% close all
-%
-% plot_plane(body,ans_geo(1),ans_struc(1))
-%
-% figure
-% plot_plane(body,ans_geo(2),ans_struc(2))
+
+% for exmaple:
+% ans_aero.CD_a
+% max(abs(ans_act(1).movement))
+% ans_act(1).energy
+% max(abs(ans_act(1).M))
+
+
+
+
+
+
